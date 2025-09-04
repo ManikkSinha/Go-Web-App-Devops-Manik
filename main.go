@@ -1,39 +1,29 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	// Render the home html page from static folder
-	http.ServeFile(w, r, "static/home.html")
-}
-
-func coursePage(w http.ResponseWriter, r *http.Request) {
-	// Render the course html page
-	http.ServeFile(w, r, "static/courses.html")
-}
-
-func aboutPage(w http.ResponseWriter, r *http.Request) {
-	// Render the about html page
-	http.ServeFile(w, r, "static/about.html")
-}
-
-func contactPage(w http.ResponseWriter, r *http.Request) {
-	// Render the contact html page
-	http.ServeFile(w, r, "static/contact.html")
-}
-
 func main() {
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/about", aboutHandler)
+	http.HandleFunc("/courses", coursesHandler)
 
-	http.HandleFunc("/home", homePage)
-	http.HandleFunc("/courses", coursePage)
-	http.HandleFunc("/about", aboutPage)
-	http.HandleFunc("/contact", contactPage)
-
-	err := http.ListenAndServe("0.0.0.0:8080", nil)
-	if err != nil {
-		log.Fatal(err)
+	fmt.Println("🚀 Server started at http://localhost:8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println("Error starting server:", err)
 	}
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Welcome to Manik's DevOps Project</h1><p>This is a demo Go web app used for learning Docker, Kubernetes, and CI/CD pipelines.</p>")
+}
+
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>About This Project</h1><p>This project is created and customized by Manik Sinha. It is a sample Go web application used to demonstrate DevOps practices.</p>")
+}
+
+func coursesHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Learning Modules</h1><ul><li>Go Web Application Basics</li><li>Docker & Containerization</li><li>Kubernetes Deployment</li><li>CI/CD Pipeline Integration</li></ul>")
 }
